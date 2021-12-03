@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DataAsset.h"
-#include "Engine/DataAsset.h"
 #include "Containers/Array.h"
 
 #include "MCPStats.generated.h"
