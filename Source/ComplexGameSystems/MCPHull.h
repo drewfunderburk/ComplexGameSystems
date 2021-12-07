@@ -31,19 +31,31 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 public:
-	UFUNCTION(BlueprintCallable, category = "MCP Hull")
-	UMCPStats* GetBaseStats() const { return m_BaseStats; }
-	TMap<FString, float> GetStats() const { return m_Stats; }
+	UMCPStats* GetMCPStatsAsset() const { return statsAsset; }
+	void SetStatsAsset(UMCPStats* asset);
+
+	TArray<FMCPStat> GetBaseStats() const { return baseStats; }
+	void SetBaseStats(TArray<FMCPStat> stats);
+
+	TArray<FMCPStat> GetStats() const { return stats; }
+	TArray<UMCPHardpoint*> GetHardpoints() const { return hardpoints; }
 
 	UFUNCTION(BlueprintCallable, category = "MCP Hull")
-	TArray<UMCPHardpoint*> GetHardpoints() const { return m_Hardpoints; }
-	UFUNCTION(BlueprintCallable, category = "MCP Hull")
-	float GetStat(FString name);
+	FMCPStat GetStat(FString name);
+
+protected:
+	virtual void UpdateStats();
 
 private:
-	UPROPERTY(EditAnywhere, category = "MCP Hull")
-	UMCPStats* m_BaseStats;
-	TMap<FString, float> m_Stats;
-	UPROPERTY(EditAnywhere, category = "MCP Hull")
-	TArray<UMCPHardpoint*> m_Hardpoints;		
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, category = "MCP Hull", meta=(AllowPrivateAccess = "true"))
+	UMCPStats* statsAsset;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, category = "MCP Hull", meta = (AllowPrivateAccess = "true"))
+	TArray<FMCPStat> baseStats;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, category = "MCP Hull", meta = (AllowPrivateAccess = "true"))
+	TArray<FMCPStat> stats;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, category = "MCP Hull", meta = (AllowPrivateAccess = "true"))
+	TArray<UMCPHardpoint*> hardpoints;		
 };

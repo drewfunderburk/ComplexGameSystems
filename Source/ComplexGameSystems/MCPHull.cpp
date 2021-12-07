@@ -32,14 +32,26 @@ void UMCPHull::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 	// ...
 }
 
-float UMCPHull::GetStat(FString name)
+void UMCPHull::SetStatsAsset(UMCPStats* asset)
+{
+}
+
+void UMCPHull::SetBaseStats(TArray<FMCPStat> stats)
+{
+}
+
+FMCPStat UMCPHull::GetStat(FString name)
 {
 	for (auto& element : GetStats())
 	{
-		if (element.Key == name)
-			return element.Value;
+		if (element.name == name)
+			return element;
 	}
 	UE_LOG(LogTemp, Warning, TEXT("No stat found."));
-	return 0.0f;
+	return FMCPStat();
+}
+
+void UMCPHull::UpdateStats()
+{
 }
 
