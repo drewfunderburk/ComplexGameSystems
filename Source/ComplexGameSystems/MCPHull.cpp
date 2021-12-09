@@ -34,10 +34,14 @@ void UMCPHull::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 
 void UMCPHull::SetStatsAsset(UMCPStats* asset)
 {
+	statsAsset = asset;
+	UpdateBaseStats();
 }
 
 void UMCPHull::SetBaseStats(TArray<FMCPStat> stats)
 {
+	baseStats = stats;
+	UpdateStats();
 }
 
 FMCPStat UMCPHull::GetStat(FString name)
@@ -52,6 +56,12 @@ FMCPStat UMCPHull::GetStat(FString name)
 }
 
 void UMCPHull::UpdateStats()
+{
+	// Reset stats to base
+	stats = baseStats;
+}
+
+void UMCPHull::UpdateBaseStats()
 {
 }
 

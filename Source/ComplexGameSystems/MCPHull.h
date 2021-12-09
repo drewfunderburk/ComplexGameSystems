@@ -44,7 +44,8 @@ public:
 	FMCPStat GetStat(FString name);
 
 protected:
-	virtual void UpdateStats();
+	void UpdateStats();
+	void UpdateBaseStats();
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, category = "MCP Hull", meta=(AllowPrivateAccess = "true"))
