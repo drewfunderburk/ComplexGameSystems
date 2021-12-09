@@ -48,13 +48,16 @@ protected:
 	void UpdateBaseStats();
 
 private:
+	void PostEditChangeProperty(struct FPropertyChangedEvent& event) override;
+
+private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, category = "MCP Hull", meta=(AllowPrivateAccess = "true"))
 	UMCPStats* statsAsset;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, category = "MCP Hull", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, EditFixedSize, BlueprintReadOnly, category = "MCP Hull", meta = (AllowPrivateAccess = "true"))
 	TArray<FMCPStat> baseStats;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, category = "MCP Hull", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, EditFixedSize, BlueprintReadOnly, category = "MCP Hull", meta = (AllowPrivateAccess = "true"))
 	TArray<FMCPStat> stats;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, category = "MCP Hull", meta = (AllowPrivateAccess = "true"))

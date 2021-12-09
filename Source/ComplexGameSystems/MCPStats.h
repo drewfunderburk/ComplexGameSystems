@@ -9,16 +9,28 @@
 #include "MCPStats.generated.h"
 
 USTRUCT(BlueprintType)
-struct FMCPStat
+struct FMCPDataAssetStat
 {
 	GENERATED_USTRUCT_BODY()
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FString Name = "";
+};
+
+USTRUCT(BlueprintType)
+struct FMCPStat
+{
+	GENERATED_USTRUCT_BODY()
+public:
+	FMCPStat() {}
+	FMCPStat(FString name) { Name = name; }
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float Value = 1.0f;
-	
+	FString Name = "";
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float Value = 0.0f;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool IsMultiplicative = true;
 };
@@ -30,5 +42,5 @@ class COMPLEXGAMESYSTEMS_API UMCPStats : public UDataAsset
 	
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, category = "MCP Stats")
-	TArray<FMCPStat> Stats;
+	TArray<FMCPDataAssetStat> Stats;
 };

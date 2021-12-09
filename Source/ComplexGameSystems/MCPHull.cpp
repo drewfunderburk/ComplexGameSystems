@@ -38,9 +38,9 @@ void UMCPHull::SetStatsAsset(UMCPStats* asset)
 	UpdateBaseStats();
 }
 
-void UMCPHull::SetBaseStats(TArray<FMCPStat> stats)
+void UMCPHull::SetBaseStats(TArray<FMCPStat> newStats)
 {
-	baseStats = stats;
+	baseStats = newStats;
 	UpdateStats();
 }
 
@@ -48,7 +48,7 @@ FMCPStat UMCPHull::GetStat(FString name)
 {
 	for (auto& element : GetStats())
 	{
-		if (element.name == name)
+		if (element.Name == name)
 			return element;
 	}
 	UE_LOG(LogTemp, Warning, TEXT("No stat found."));
@@ -63,5 +63,43 @@ void UMCPHull::UpdateStats()
 
 void UMCPHull::UpdateBaseStats()
 {
+	// Ensure statsAsset is not null
+	if (!statsAsset)
+		return;
+
+	// Empty baseStats array
+	baseStats.Empty();
+
+	// Get stats from statsAsset and add them to baseStats
+	for (auto& statType : statsAsset->Stats)
+	{
+		baseStats.Add(FMCPStat(statType.Name));
+	}
+
+
+	UpdateStats();
 }
 
+#if WITH_EDITOR
+void UMCPHull::PostEditChangeProperty(FPropertyChangedEvent& e)
+{
+	FName propertyName = (e.MemberProperty != NULL) ? e.MemberProperty->GetFName() : NAME_None;
+	if (propertyName == GET_MEMBER_NAME_CHECKED(UMCPHull, statsAsset))
+	{
+		if (statsAsset)
+			UpdateBaseStats();
+	}
+	else if (propertyName == GET_MEMBER_NAME_CHECKED(UMCPHull, baseStats))
+	{
+		if (baseStats.Num())
+			UpdateStats();
+	}
+	else if (propertyName == GET_MEMBER_NAME_CHECKED(UMCPHull, hardpoints))
+	{
+		if (baseStats.Num())
+			UpdateStats();
+	}
+
+	Super::PostEditChangeProperty(e);
+}
+#endif
