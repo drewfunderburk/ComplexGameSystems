@@ -43,8 +43,9 @@ public:
 	UFUNCTION(BlueprintCallable, category = "MCP Hull")
 	FMCPStat GetStat(FString name);
 
-protected:
 	void UpdateStats();
+
+protected:
 	void UpdateBaseStats();
 
 private:

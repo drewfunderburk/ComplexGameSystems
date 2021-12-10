@@ -59,16 +59,43 @@ void UMCPHull::UpdateStats()
 {
 	// Reset stats to base
 	stats = baseStats;
+
+	for (auto* hardpoint : hardpoints)
+	{
+		// Ensure hardpoint is valid
+		if (!hardpoint)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Hardpoint is null."));
+			continue;
+		}
+		// Ensure hardpoint has a statsAsset
+		if (hardpoint->GetMCPStatsAsset() != statsAsset)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Hardpoint has no data asset."));
+			continue;
+		}
+
+		// Apply all stats
+		for (int i = 0; i < stats.Num(); i++)
+		{
+			FMCPStat stat = hardpoint->GetStats()[i];
+			
+			if (stat.IsMultiplicative)
+				stats[i].Value *= stat.Value;
+			if (!stat.IsMultiplicative)
+				stats[i].Value += stat.Value;
+		}
+	}
 }
 
 void UMCPHull::UpdateBaseStats()
 {
+	// Empty baseStats array
+	baseStats.Empty();
+
 	// Ensure statsAsset is not null
 	if (!statsAsset)
 		return;
-
-	// Empty baseStats array
-	baseStats.Empty();
 
 	// Get stats from statsAsset and add them to baseStats
 	for (auto& statType : statsAsset->Stats)
@@ -86,7 +113,6 @@ void UMCPHull::PostEditChangeProperty(FPropertyChangedEvent& e)
 	FName propertyName = (e.MemberProperty != NULL) ? e.MemberProperty->GetFName() : NAME_None;
 	if (propertyName == GET_MEMBER_NAME_CHECKED(UMCPHull, statsAsset))
 	{
-		if (statsAsset)
 			UpdateBaseStats();
 	}
 	else if (propertyName == GET_MEMBER_NAME_CHECKED(UMCPHull, baseStats))
@@ -98,6 +124,11 @@ void UMCPHull::PostEditChangeProperty(FPropertyChangedEvent& e)
 	{
 		if (baseStats.Num())
 			UpdateStats();
+
+		for (auto& hardpoint : hardpoints)
+		{
+			hardpoint->SetOwningHull(this);
+		}
 	}
 
 	Super::PostEditChangeProperty(e);

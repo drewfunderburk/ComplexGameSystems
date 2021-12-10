@@ -47,3 +47,5 @@ developers will need to create a new DataAsset object of type `MCPStats` in thei
 project that will be shared between a hull and its hardpoints. As each stat block
 is represented by a different DataAsset, an infinite number of Mobile Combat Platforms
 may be used in a single game with different stats for each.
+
+![Modular Combat Platform UML](ModularCombatPlatform_UML.png)

@@ -25,7 +25,7 @@ public:
 	FMCPStat() {}
 	FMCPStat(FString name) { Name = name; }
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	FString Name = "";
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
