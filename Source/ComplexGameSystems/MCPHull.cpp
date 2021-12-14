@@ -10,7 +10,13 @@ UMCPHull::UMCPHull()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
-	// ...
+	// Get all MCPHardpoints in children
+	if (AActor* owner = GetOwner())
+	{
+		TArray<UMCPHardpoint*> childHardpoints;
+		owner->GetComponents<UMCPHardpoint>(childHardpoints, true);
+		hardpoints = childHardpoints;
+	}
 }
 
 
@@ -53,6 +59,11 @@ FMCPStat UMCPHull::GetStat(FString name)
 	}
 	UE_LOG(LogTemp, Warning, TEXT("No stat found."));
 	return FMCPStat();
+}
+
+bool UMCPHull::AddHardpoint(UMCPHardpoint* hardpoint)
+{
+	return false;
 }
 
 void UMCPHull::UpdateStats()
@@ -124,11 +135,6 @@ void UMCPHull::PostEditChangeProperty(FPropertyChangedEvent& e)
 	{
 		if (baseStats.Num())
 			UpdateStats();
-
-		for (auto& hardpoint : hardpoints)
-		{
-			hardpoint->SetOwningHull(this);
-		}
 	}
 
 	Super::PostEditChangeProperty(e);

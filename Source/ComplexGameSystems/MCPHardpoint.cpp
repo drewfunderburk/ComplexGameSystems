@@ -11,7 +11,28 @@ UMCPHardpoint::UMCPHardpoint()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
-	// ...
+	// Get MCPHulls from parent actor if any
+	TArray<UMCPHull*> hulls;
+	if (AActor* owner = GetOwner())
+		if (AActor* parent = owner->GetParentActor())
+			parent->GetComponents<UMCPHull>(hulls);
+
+	if (hulls.Num() > 0)
+	{
+		for (UMCPHull* hull : hulls)
+		{
+			// Add this hardpoint to the list
+			bool willAdd = true;
+			for (UMCPHardpoint* hardpoint : hull->GetHardpoints())
+			{
+				if (hardpoint == this)
+					willAdd = false;
+			}
+
+			if (willAdd)
+				hull->AddHardpoint(this);
+		}
+	}
 }
 
 
@@ -37,12 +58,6 @@ void UMCPHardpoint::SetMCPStatsAsset(UMCPStats* asset)
 {
 	statsAsset = asset;
 	UpdateStats();
-}
-
-void UMCPHardpoint::SetOwningHull(UMCPHull* hull)
-{
-	if (hull)
-		owningHull = hull;
 }
 
 void UMCPHardpoint::SetStats(TArray<FMCPStat> newStats)
@@ -77,19 +92,6 @@ void UMCPHardpoint::UpdateStats()
 	}
 }
 
-#if WITH_EDITOR
-void UMCPHardpoint::PostEditChangeProperty(FPropertyChangedEvent& e)
+void UMCPHardpoint::BeginDestroy()
 {
-	FName propertyName = (e.MemberProperty != NULL) ? e.MemberProperty->GetFName() : NAME_None;
-	if (propertyName == GET_MEMBER_NAME_CHECKED(UMCPHardpoint, statsAsset))
-	{
-		UpdateStats();
-		if (owningHull)
-			owningHull->UpdateStats();
-		
-	}
-
-	Super::PostEditChangeProperty(e);
 }
-#endif
-
