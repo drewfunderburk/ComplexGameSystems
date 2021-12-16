@@ -38,17 +38,18 @@ public:
 	void SetBaseStats(TArray<FMCPStat> stats);
 
 	TArray<FMCPStat> GetStats() const { return stats; }
-	TArray<UMCPHardpoint*> GetHardpoints() const { return hardpoints; }
+	TArray<UActorComponent*> GetHardpoints() const { return hardpoints; }
 
 	UFUNCTION(BlueprintCallable, category = "MCP Hull")
 	FMCPStat GetStat(FString name);
 
 	UFUNCTION(BlueprintCallable, category = "MCP Hull")
-	bool AddHardpoint(UMCPHardpoint* hardpoint);
 
 	void UpdateStats();
+	void UpdateHardpoints();
  
 protected:
+	UFUNCTION(CallInEditor)
 	void UpdateBaseStats();
 
 private:
@@ -65,5 +66,5 @@ private:
 	TArray<FMCPStat> stats;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, category = "MCP Hull", meta = (AllowPrivateAccess = "true"))
-	TArray<UMCPHardpoint*> hardpoints;
+	TArray<UActorComponent*> hardpoints;
 };

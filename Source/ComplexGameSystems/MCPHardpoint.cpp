@@ -10,29 +10,6 @@ UMCPHardpoint::UMCPHardpoint()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-
-	// Get MCPHulls from parent actor if any
-	TArray<UMCPHull*> hulls;
-	if (AActor* owner = GetOwner())
-		if (AActor* parent = owner->GetParentActor())
-			parent->GetComponents<UMCPHull>(hulls);
-
-	if (hulls.Num() > 0)
-	{
-		for (UMCPHull* hull : hulls)
-		{
-			// Add this hardpoint to the list
-			bool willAdd = true;
-			for (UMCPHardpoint* hardpoint : hull->GetHardpoints())
-			{
-				if (hardpoint == this)
-					willAdd = false;
-			}
-
-			if (willAdd)
-				hull->AddHardpoint(this);
-		}
-	}
 }
 
 
