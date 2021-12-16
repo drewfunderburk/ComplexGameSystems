@@ -38,13 +38,13 @@ void UMCPHull::SetStatsAsset(UMCPStats* asset)
 	UpdateBaseStats();
 }
 
-void UMCPHull::SetBaseStats(TArray<FMCPStat> newStats)
+void UMCPHull::SetBaseStats(TArray<FMCPHullStat> newStats)
 {
 	baseStats = newStats;
 	UpdateStats();
 }
 
-FMCPStat UMCPHull::GetStat(FString name)
+FMCPHullStat UMCPHull::GetStat(FString name)
 {
 	for (auto& element : GetStats())
 	{
@@ -52,42 +52,45 @@ FMCPStat UMCPHull::GetStat(FString name)
 			return element;
 	}
 	UE_LOG(LogTemp, Warning, TEXT("No stat found."));
-	return FMCPStat();
+	return FMCPHullStat();
 }
 
 void UMCPHull::UpdateStats()
 {
-	//// Reset stats to base
-	//stats = baseStats;
+	// Reset stats to base
+	stats.Empty();
+	for (FMCPHullStat baseStat : baseStats)
+	{
+		FMCPHullStat stat = { baseStat.Name, baseStat.Value };
+		stats.Add(stat);
+	}
 
-	//UpdateHardpoints();
+	for (auto* hardpoint : hardpoints)
+	{
+		// Ensure hardpoint is valid
+		if (!hardpoint)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Hardpoint is null."));
+			continue;
+		}
+		// Ensure hardpoint has a statsAsset
+		if (hardpoint->GetMCPStatsAsset() != statsAsset)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Hardpoint has no data asset."));
+			continue;
+		}
 
-	//for (auto* hardpoint : hardpoints)
-	//{
-	//	// Ensure hardpoint is valid
-	//	if (!hardpoint)
-	//	{
-	//		UE_LOG(LogTemp, Warning, TEXT("Hardpoint is null."));
-	//		continue;
-	//	}
-	//	// Ensure hardpoint has a statsAsset
-	//	if (hardpoint->GetMCPStatsAsset() != statsAsset)
-	//	{
-	//		UE_LOG(LogTemp, Warning, TEXT("Hardpoint has no data asset."));
-	//		continue;
-	//	}
+		// Apply all stats
+		for (int i = 0; i < stats.Num(); i++)
+		{
+			FMCPHardpointStat stat = hardpoint->GetStats()[i];
 
-	//	// Apply all stats
-	//	for (int i = 0; i < stats.Num(); i++)
-	//	{
-	//		FMCPStat stat = hardpoint->GetStats()[i];
-
-	//		if (stat.IsMultiplicative)
-	//			stats[i].Value *= stat.Value;
-	//		if (!stat.IsMultiplicative)
-	//			stats[i].Value += stat.Value;
-	//	}
-	//}
+			if (stat.IsMultiplicative)
+				stats[i].Value *= stat.Value;
+			if (!stat.IsMultiplicative)
+				stats[i].Value += stat.Value;
+		}
+	}
 }
 
 void UMCPHull::UpdateHardpoints()
@@ -97,16 +100,7 @@ void UMCPHull::UpdateHardpoints()
 	{
 		TArray<UMCPHardpoint*> childHardpoints;
 		owner->GetComponents<UMCPHardpoint>(childHardpoints, true);
-		TArray<UActorComponent*> childComponents;
-		for (UMCPHardpoint* childHardpoint : childHardpoints)
-		{
-			UActorComponent* component = childHardpoint;
-			childComponents.Add(component);
-		}
-
-		hardpoints = childComponents;
-		for (int i = 0; i < hardpoints.Num(); i++)
-			UE_LOG(LogTemp, Warning, TEXT("%s"), *hardpoints[i]->GetFName().ToString());
+		hardpoints = childHardpoints;
 	}
 }
 
@@ -122,7 +116,7 @@ void UMCPHull::UpdateBaseStats()
 	// Get stats from statsAsset and add them to baseStats
 	for (auto& statType : statsAsset->Stats)
 	{
-		baseStats.Add(FMCPStat(statType.Name));
+		baseStats.Add(FMCPHullStat(statType.Name));
 	}
 
 	UpdateHardpoints();
@@ -135,8 +129,9 @@ void UMCPHull::PostEditChangeProperty(FPropertyChangedEvent& e)
 	FName propertyName = (e.MemberProperty != NULL) ? e.MemberProperty->GetFName() : NAME_None;
 	if (propertyName == GET_MEMBER_NAME_CHECKED(UMCPHull, statsAsset))
 	{
-		UpdateHardpoints();
 		UpdateBaseStats();
+		UpdateHardpoints();
+		UpdateStats();
 	}
 	else if (propertyName == GET_MEMBER_NAME_CHECKED(UMCPHull, baseStats))
 	{

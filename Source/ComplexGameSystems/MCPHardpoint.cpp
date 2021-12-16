@@ -37,12 +37,12 @@ void UMCPHardpoint::SetMCPStatsAsset(UMCPStats* asset)
 	UpdateStats();
 }
 
-void UMCPHardpoint::SetStats(TArray<FMCPStat> newStats)
+void UMCPHardpoint::SetStats(TArray<FMCPHardpointStat> newStats)
 {
 	stats = newStats;
 }
 
-FMCPStat UMCPHardpoint::GetStat(FString name)
+FMCPHardpointStat UMCPHardpoint::GetStat(FString name)
 {
 	for (auto& element : GetStats())
 	{
@@ -50,7 +50,7 @@ FMCPStat UMCPHardpoint::GetStat(FString name)
 			return element;
 	}
 	UE_LOG(LogTemp, Warning, TEXT("No stat found."));
-	return FMCPStat();
+	return FMCPHardpointStat();
 }
 
 void UMCPHardpoint::UpdateStats()
@@ -65,10 +65,17 @@ void UMCPHardpoint::UpdateStats()
 	// Get stats from statsAsset and add them to baseStats
 	for (auto& statType : statsAsset->Stats)
 	{
-		stats.Add(FMCPStat(statType.Name));
+		stats.Add(FMCPHardpointStat(statType.Name));
 	}
 }
 
-void UMCPHardpoint::BeginDestroy()
+void UMCPHardpoint::PostEditChangeProperty(FPropertyChangedEvent& e)
 {
+	FName propertyName = (e.MemberProperty != NULL) ? e.MemberProperty->GetFName() : NAME_None;
+	if (propertyName == GET_MEMBER_NAME_CHECKED(UMCPHardpoint, statsAsset))
+	{
+		UpdateStats();
+	}
+
+	Super::PostEditChangeProperty(e);
 }

@@ -32,17 +32,17 @@ public:
 	UMCPStats* GetMCPStatsAsset() const { return statsAsset; }
 	void SetMCPStatsAsset(UMCPStats* asset);
 
-	TArray<FMCPStat> GetStats() const { return stats; }
-	void SetStats(TArray<FMCPStat> newStats);
+	TArray<FMCPHardpointStat> GetStats() const { return stats; }
+	void SetStats(TArray<FMCPHardpointStat> newStats);
 
 	UFUNCTION(BlueprintCallable, category = "MCP Hardpoint")
-	FMCPStat GetStat(FString name);
+	FMCPHardpointStat GetStat(FString name);
 
 protected:
 	void UpdateStats();
 
 private:
-	void BeginDestroy() override;
+	void PostEditChangeProperty(struct FPropertyChangedEvent& e) override;
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, category = "MCP Hardpoint", meta = (AllowPrivateAccess = "true"))
@@ -50,5 +50,5 @@ private:
 
 public:
 	UPROPERTY(EditAnywhere, EditFixedSize, BlueprintReadOnly, category = "MCP Hardpoint", meta = (AllowPrivateAccess = "true"))
-	TArray<FMCPStat> stats;
+	TArray<FMCPHardpointStat> stats;
 };

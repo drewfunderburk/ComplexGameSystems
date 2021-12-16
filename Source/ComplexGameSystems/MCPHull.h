@@ -34,37 +34,38 @@ public:
 	UMCPStats* GetMCPStatsAsset() const { return statsAsset; }
 	void SetStatsAsset(UMCPStats* asset);
 
-	TArray<FMCPStat> GetBaseStats() const { return baseStats; }
-	void SetBaseStats(TArray<FMCPStat> stats);
+	TArray<FMCPHullStat> GetBaseStats() const { return baseStats; }
+	void SetBaseStats(TArray<FMCPHullStat> stats);
 
-	TArray<FMCPStat> GetStats() const { return stats; }
-	TArray<UActorComponent*> GetHardpoints() const { return hardpoints; }
-
-	UFUNCTION(BlueprintCallable, category = "MCP Hull")
-	FMCPStat GetStat(FString name);
+	TArray<FMCPHullStat> GetStats() const { return stats; }
+	TArray<UMCPHardpoint*> GetHardpoints() const { return hardpoints; }
 
 	UFUNCTION(BlueprintCallable, category = "MCP Hull")
+	FMCPHullStat GetStat(FString name);
 
+	UFUNCTION(CallInEditor, BlueprintCallable, category = "MCP Hull")
 	void UpdateStats();
+
+	UFUNCTION(CallInEditor, BlueprintCallable, category = "MCP Hull")
 	void UpdateHardpoints();
  
 protected:
-	UFUNCTION(CallInEditor)
+	UFUNCTION(CallInEditor, BlueprintCallable, category = "MCP Hull")
 	void UpdateBaseStats();
 
 private:
-	void PostEditChangeProperty(struct FPropertyChangedEvent& event) override;
+	void PostEditChangeProperty(struct FPropertyChangedEvent& e) override;
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, category = "MCP Hull", meta=(AllowPrivateAccess = "true"))
 	UMCPStats* statsAsset;
 
 	UPROPERTY(EditAnywhere, EditFixedSize, BlueprintReadOnly, category = "MCP Hull", meta = (AllowPrivateAccess = "true"))
-	TArray<FMCPStat> baseStats;
+	TArray<FMCPHullStat> baseStats;
 
 	UPROPERTY(VisibleAnywhere, EditFixedSize, BlueprintReadOnly, category = "MCP Hull", meta = (AllowPrivateAccess = "true"))
-	TArray<FMCPStat> stats;
+	TArray<FMCPHullStat> stats;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, category = "MCP Hull", meta = (AllowPrivateAccess = "true"))
-	TArray<UActorComponent*> hardpoints;
+	UPROPERTY(EditAnywhere, EditFixedSize, BlueprintReadOnly, category = "MCP Hull", meta = (AllowPrivateAccess = "true"))
+	TArray<UMCPHardpoint*> hardpoints;
 };

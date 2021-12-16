@@ -16,14 +16,28 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FString Name = "";
 };
-
 USTRUCT(BlueprintType)
-struct FMCPStat
+struct FMCPHullStat
 {
 	GENERATED_USTRUCT_BODY()
 public:
-	FMCPStat() {}
-	FMCPStat(FString name) { Name = name; }
+	FMCPHullStat(FString name = "", float value = 0.0f) 
+		: Name(name), Value(value) {}
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	FString Name = "";
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float Value = 0.0f;
+};
+
+USTRUCT(BlueprintType)
+struct FMCPHardpointStat
+{
+	GENERATED_USTRUCT_BODY()
+public:
+	FMCPHardpointStat(FString name = "", float value = 0.0f, bool isMultiplicative = true) 
+		: Name(name), Value(value), IsMultiplicative(isMultiplicative) {}
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	FString Name = "";
