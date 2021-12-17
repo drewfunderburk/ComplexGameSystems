@@ -1,3 +1,6 @@
 # ComplexGameSystems
 
-Developed with Unreal Engine 4
+### Todo
+
+- [ ] Test GetStat and SetStat for reference or value
+- [ ] Write Documentation
