@@ -8,6 +8,7 @@
 
 #include "MCPStats.generated.h"
 
+// Used for MCPStats data assets only
 USTRUCT(BlueprintType)
 struct FMCPDataAssetStat
 {
@@ -16,6 +17,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FString Name = "";
 };
+
+// Used for stats in MCPHull objects
 USTRUCT(BlueprintType)
 struct FMCPHullStat
 {
@@ -31,6 +34,7 @@ public:
 	float Value = 0.0f;
 };
 
+// Used for stats in MCPHardpoint objects
 USTRUCT(BlueprintType)
 struct FMCPHardpointStat
 {
@@ -49,12 +53,13 @@ public:
 	bool IsMultiplicative = true;
 };
 
+// Type used for MCPStats Data Assets
 UCLASS()
 class COMPLEXGAMESYSTEMS_API UMCPStats : public UDataAsset
 {
 	GENERATED_BODY()
 	
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, category = "MCP Stats")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, category = "MCP Stats")
 	TArray<FMCPDataAssetStat> Stats;
 };

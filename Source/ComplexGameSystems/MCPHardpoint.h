@@ -29,14 +29,19 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 public:
+	// Getters and Setters
 	UMCPStats* GetMCPStatsAsset() const { return statsAsset; }
 	void SetMCPStatsAsset(UMCPStats* asset);
 
 	TArray<FMCPHardpointStat> GetStats() const { return stats; }
 	void SetStats(TArray<FMCPHardpointStat> newStats);
 
+	// Get stat by name
 	UFUNCTION(BlueprintCallable, category = "MCP Hardpoint")
 	FMCPHardpointStat GetStat(FString name);
+
+	UFUNCTION(BlueprintCallable, category = "MCP Hardpoint")
+	void SetStat(FString name, float value, bool isMultiplicative = false);
 
 protected:
 	void UpdateStats();

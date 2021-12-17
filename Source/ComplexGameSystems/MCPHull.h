@@ -19,18 +19,16 @@ class COMPLEXGAMESYSTEMS_API UMCPHull : public UActorComponent
 	GENERATED_BODY()
 
 public:	
-	// Sets default values for this component's properties
 	UMCPHull();
 
 protected:
-	// Called when the game starts
 	virtual void BeginPlay() override;
 
 public:	
-	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 public:
+	// Getters and Setters
 	UMCPStats* GetMCPStatsAsset() const { return statsAsset; }
 	void SetStatsAsset(UMCPStats* asset);
 
@@ -40,9 +38,15 @@ public:
 	TArray<FMCPHullStat> GetStats() const { return stats; }
 	TArray<UMCPHardpoint*> GetHardpoints() const { return hardpoints; }
 
+	// Get stat by name
 	UFUNCTION(BlueprintCallable, category = "MCP Hull")
-	FMCPHullStat GetStat(FString name);
+	FMCPHullStat GetStat(FString name) const;
 
+	// Set stat by name
+	UFUNCTION(BlueprintCallable, category = "MCP Hull")
+	void SetStat(FString name, float value);
+
+	// Update functions
 	UFUNCTION(CallInEditor, BlueprintCallable, category = "MCP Hull")
 	void UpdateStats();
 
@@ -54,6 +58,7 @@ protected:
 	void UpdateBaseStats();
 
 private:
+	// Used to auto update properties in details
 	void PostEditChangeProperty(struct FPropertyChangedEvent& e) override;
 
 private:
@@ -63,7 +68,7 @@ private:
 	UPROPERTY(EditAnywhere, EditFixedSize, BlueprintReadOnly, category = "MCP Hull", meta = (AllowPrivateAccess = "true"))
 	TArray<FMCPHullStat> baseStats;
 
-	UPROPERTY(VisibleAnywhere, EditFixedSize, BlueprintReadOnly, category = "MCP Hull", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleInstanceOnly, EditFixedSize, BlueprintReadOnly, category = "MCP Hull", meta = (AllowPrivateAccess = "true"))
 	TArray<FMCPHullStat> stats;
 
 	UPROPERTY(EditAnywhere, EditFixedSize, BlueprintReadOnly, category = "MCP Hull", meta = (AllowPrivateAccess = "true"))

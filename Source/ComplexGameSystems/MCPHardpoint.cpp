@@ -53,6 +53,18 @@ FMCPHardpointStat UMCPHardpoint::GetStat(FString name)
 	return FMCPHardpointStat();
 }
 
+void UMCPHardpoint::SetStat(FString name, float value, bool isMultiplicative)
+{
+	FMCPHardpointStat stat = GetStat(name);
+	if (stat.Name != "")
+	{
+		stat.Value = value;
+		stat.IsMultiplicative = isMultiplicative;
+	}
+	else
+		UE_LOG(LogTemp, Warning, TEXT("No stat found with name: %s"), *name);
+}
+
 void UMCPHardpoint::UpdateStats()
 {
 	// Empty baseStats array

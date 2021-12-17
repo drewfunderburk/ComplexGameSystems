@@ -11,6 +11,7 @@ UMCPHull::UMCPHull()
 	PrimaryComponentTick.bCanEverTick = true;
 
 	UpdateHardpoints();
+	UpdateStats();
 }
 
 
@@ -44,15 +45,24 @@ void UMCPHull::SetBaseStats(TArray<FMCPHullStat> newStats)
 	UpdateStats();
 }
 
-FMCPHullStat UMCPHull::GetStat(FString name)
+FMCPHullStat UMCPHull::GetStat(FString name) const
 {
 	for (auto& element : GetStats())
 	{
 		if (element.Name == name)
 			return element;
 	}
-	UE_LOG(LogTemp, Warning, TEXT("No stat found."));
+	UE_LOG(LogTemp, Warning, TEXT("No stat found with name: %s"), *name);
 	return FMCPHullStat();
+}
+
+void UMCPHull::SetStat(FString name, float value)
+{
+	FMCPHullStat stat = GetStat(name);
+	if (stat.Name != "")
+		stat.Value = value;
+	else
+		UE_LOG(LogTemp, Warning, TEXT("No stat found with name: %s"), *name);
 }
 
 void UMCPHull::UpdateStats()
@@ -73,10 +83,10 @@ void UMCPHull::UpdateStats()
 			UE_LOG(LogTemp, Warning, TEXT("Hardpoint is null."));
 			continue;
 		}
-		// Ensure hardpoint has a statsAsset
+		// Ensure hardpoint has the same statsAsset as this hull
 		if (hardpoint->GetMCPStatsAsset() != statsAsset)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Hardpoint has no data asset."));
+			UE_LOG(LogTemp, Warning, TEXT("%s stats asset does not match Hull: %s"), *hardpoint->GetMCPStatsAsset()->GetName());
 			continue;
 		}
 
