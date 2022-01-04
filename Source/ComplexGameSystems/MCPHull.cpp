@@ -36,7 +36,7 @@ void UMCPHull::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 void UMCPHull::SetStatsAsset(UMCPStats* asset)
 {
 	statsAsset = asset;
-	UpdateBaseStats();
+	ResetBaseStats();
 }
 
 void UMCPHull::SetBaseStats(TArray<FMCPHullStat> newStats)
@@ -114,7 +114,7 @@ void UMCPHull::UpdateHardpoints()
 	}
 }
 
-void UMCPHull::UpdateBaseStats()
+void UMCPHull::ResetBaseStats()
 {
 	// Empty baseStats array
 	baseStats.Empty();
@@ -139,7 +139,7 @@ void UMCPHull::PostEditChangeProperty(FPropertyChangedEvent& e)
 	FName propertyName = (e.MemberProperty != NULL) ? e.MemberProperty->GetFName() : NAME_None;
 	if (propertyName == GET_MEMBER_NAME_CHECKED(UMCPHull, statsAsset))
 	{
-		UpdateBaseStats();
+		ResetBaseStats();
 		UpdateHardpoints();
 		UpdateStats();
 	}

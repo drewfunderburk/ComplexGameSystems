@@ -55,7 +55,7 @@ public:
  
 protected:
 	UFUNCTION(CallInEditor, BlueprintCallable, category = "MCP Hull")
-	void UpdateBaseStats();
+	void ResetBaseStats();
 
 private:
 	// Used to auto update properties in details
