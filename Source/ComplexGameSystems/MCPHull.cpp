@@ -55,9 +55,7 @@ void UMCPHull::SetBaseStat(FString name, float value)
 	{
 		if (baseStats[i].Name == name)
 		{
-			UE_LOG(LogTemp, Log, TEXT("%f"), baseStats[i].Value + value);
 			baseStats[i].Value = value;
-			UE_LOG(LogTemp, Log, TEXT("%f"), baseStats[i].Value);
 			return;
 		}
 	}
