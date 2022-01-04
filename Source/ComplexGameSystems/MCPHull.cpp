@@ -14,7 +14,6 @@ UMCPHull::UMCPHull()
 	UpdateStats();
 }
 
-
 // Called when the game starts
 void UMCPHull::BeginPlay()
 {
@@ -39,30 +38,41 @@ void UMCPHull::SetStatsAsset(UMCPStats* asset)
 	ResetBaseStats();
 }
 
-void UMCPHull::SetBaseStats(TArray<FMCPHullStat> newStats)
+float UMCPHull::GetBaseStatValue(FString name) const
 {
-	baseStats = newStats;
-	UpdateStats();
-}
-
-FMCPHullStat UMCPHull::GetStat(FString name) const
-{
-	for (auto& element : GetStats())
+	for (auto& element : baseStats)
 	{
 		if (element.Name == name)
-			return element;
+			return element.Value;
 	}
-	UE_LOG(LogTemp, Warning, TEXT("No stat found with name: %s"), *name);
-	return FMCPHullStat();
+	UE_LOG(LogTemp, Warning, TEXT("No base stat found with name: %s"), *name);
+	return -1;
 }
 
-void UMCPHull::SetStat(FString name, float value)
+void UMCPHull::SetBaseStat(FString name, float value)
 {
-	FMCPHullStat stat = GetStat(name);
-	if (stat.Name != "")
-		stat.Value = value;
-	else
-		UE_LOG(LogTemp, Warning, TEXT("No stat found with name: %s"), *name);
+	for (int i = 0; i < baseStats.Num(); i++)
+	{
+		if (baseStats[i].Name == name)
+		{
+			UE_LOG(LogTemp, Log, TEXT("%f"), baseStats[i].Value + value);
+			baseStats[i].Value = value;
+			UE_LOG(LogTemp, Log, TEXT("%f"), baseStats[i].Value);
+			return;
+		}
+	}
+	UE_LOG(LogTemp, Warning, TEXT("No base stat found with name: %s"), *name);
+}
+
+float UMCPHull::GetStatValue(FString name) const
+{
+	for (auto& element : stats)
+	{
+		if (element.Name == name)
+			return element.Value;
+	}
+	UE_LOG(LogTemp, Warning, TEXT("No stat found with name: %s"), *name);
+	return -1;
 }
 
 void UMCPHull::UpdateStats()
@@ -83,10 +93,12 @@ void UMCPHull::UpdateStats()
 			UE_LOG(LogTemp, Warning, TEXT("Hardpoint is null."));
 			continue;
 		}
+
 		// Ensure hardpoint has the same statsAsset as this hull
 		if (hardpoint->GetMCPStatsAsset() != statsAsset)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("%s stats asset does not match Hull: %s"), *hardpoint->GetMCPStatsAsset()->GetName());
+			if (hardpoint->GetMCPStatsAsset())
+				UE_LOG(LogTemp, Warning, TEXT("%s stats asset does not match Hull: %s"), *hardpoint->GetMCPStatsAsset()->GetName());
 			continue;
 		}
 

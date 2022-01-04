@@ -32,19 +32,19 @@ public:
 	UMCPStats* GetMCPStatsAsset() const { return statsAsset; }
 	void SetStatsAsset(UMCPStats* asset);
 
-	TArray<FMCPHullStat> GetBaseStats() const { return baseStats; }
-	void SetBaseStats(TArray<FMCPHullStat> stats);
-
 	TArray<FMCPHullStat> GetStats() const { return stats; }
 	TArray<UMCPHardpoint*> GetHardpoints() const { return hardpoints; }
 
+	// Get base stat by name
+	UFUNCTION(BlueprintCallable, category = "MCP Hull")
+	float GetBaseStatValue(FString name) const;
+
+	UFUNCTION(BlueprintCallable, category = "MCP Hull")
+	void SetBaseStat(FString name, float value);
+
 	// Get stat by name
 	UFUNCTION(BlueprintCallable, category = "MCP Hull")
-	FMCPHullStat GetStat(FString name) const;
-
-	// Set stat by name
-	UFUNCTION(BlueprintCallable, category = "MCP Hull")
-	void SetStat(FString name, float value);
+	float GetStatValue(FString name) const;
 
 	// Update functions
 	UFUNCTION(CallInEditor, BlueprintCallable, category = "MCP Hull")
