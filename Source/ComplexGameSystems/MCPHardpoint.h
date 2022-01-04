@@ -54,6 +54,6 @@ private:
 	UMCPStats* statsAsset;
 
 public:
-	UPROPERTY(EditAnywhere, EditFixedSize, BlueprintReadOnly, category = "MCP Hardpoint", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, EditFixedSize, BlueprintReadOnly, category = "MCP Hardpoint", meta = (AllowPrivateAccess = "true", TitleProperty = "Name"))
 	TArray<FMCPHardpointStat> stats;
 };

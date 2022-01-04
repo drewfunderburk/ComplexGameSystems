@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Engine/DataAsset.h"
 #include "Containers/Array.h"
+#include "Containers/Map.h"
 
 #include "MCPStats.generated.h"
 
@@ -60,6 +61,6 @@ class COMPLEXGAMESYSTEMS_API UMCPStats : public UDataAsset
 	GENERATED_BODY()
 	
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, category = "MCP Stats")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, category = "MCP Stats", meta = (TitleProperty = "Name"))
 	TArray<FMCPDataAssetStat> Stats;
 };
