@@ -2,5 +2,6 @@
 
 ### Todo
 
-- [ ] Test GetStat and SetStat for reference or value
+- [x] Test GetStat and SetStat for reference or value
+- [ ] Ensure stats update properly
 - [ ] Write Documentation

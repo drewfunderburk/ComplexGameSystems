@@ -10,7 +10,7 @@ UMCPHull::UMCPHull()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
-	UpdateHardpoints();
+	UpdateChildHardpoints();
 	UpdateStats();
 }
 
@@ -38,6 +38,41 @@ void UMCPHull::SetStatsAsset(UMCPStats* asset)
 	ResetBaseStats();
 }
 
+TArray<UMCPHardpoint*> UMCPHull::GetAllHardpoints() const
+{
+	// Return an array containing both childHardpoints and extraHardpoints
+	TArray<UMCPHardpoint*> hardpoints;
+	hardpoints.Append(childHardpoints);
+	hardpoints.Append(extraHardpoints);
+	return hardpoints;
+}
+
+void UMCPHull::AddExtraHardpoint(UMCPHardpoint* hardpoint)
+{
+	extraHardpoints.Add(hardpoint);
+	UpdateStats();
+}
+
+bool UMCPHull::RemoveExtraHardpointByIndex(int index)
+{
+	// Ensure valid index
+	if (!extraHardpoints.IsValidIndex(index))
+		return false;
+
+	extraHardpoints.RemoveAt(index);
+	UpdateChildHardpoints();
+	UpdateStats();
+	return true;
+}
+
+int UMCPHull::RemoveExtraHardpoint(UMCPHardpoint* hardpoint)
+{
+	int count = extraHardpoints.Remove(hardpoint);
+	UpdateChildHardpoints();
+	UpdateStats();
+	return count;
+}
+
 float UMCPHull::GetBaseStatValue(FString name) const
 {
 	for (auto& element : baseStats)
@@ -49,7 +84,7 @@ float UMCPHull::GetBaseStatValue(FString name) const
 	return -1;
 }
 
-void UMCPHull::SetBaseStat(FString name, float value)
+void UMCPHull::SetBaseStatValue(FString name, float value)
 {
 	for (int i = 0; i < baseStats.Num(); i++)
 	{
@@ -83,7 +118,7 @@ void UMCPHull::UpdateStats()
 		stats.Add(stat);
 	}
 
-	for (auto* hardpoint : hardpoints)
+	for (auto* hardpoint : GetAllHardpoints())
 	{
 		// Ensure hardpoint is valid
 		if (!hardpoint)
@@ -113,14 +148,14 @@ void UMCPHull::UpdateStats()
 	}
 }
 
-void UMCPHull::UpdateHardpoints()
+void UMCPHull::UpdateChildHardpoints()
 {
 	// Get all MCPHardpoints in children
 	if (AActor* owner = GetOwner())
 	{
-		TArray<UMCPHardpoint*> childHardpoints;
-		owner->GetComponents<UMCPHardpoint>(childHardpoints, true);
-		hardpoints = childHardpoints;
+		TArray<UMCPHardpoint*> hardpoints;
+		owner->GetComponents<UMCPHardpoint>(hardpoints, true);
+		childHardpoints = hardpoints;
 	}
 }
 
@@ -139,7 +174,7 @@ void UMCPHull::ResetBaseStats()
 		baseStats.Add(FMCPHullStat(statType.Name));
 	}
 
-	UpdateHardpoints();
+	UpdateChildHardpoints();
 	UpdateStats();
 }
 
@@ -150,18 +185,18 @@ void UMCPHull::PostEditChangeProperty(FPropertyChangedEvent& e)
 	if (propertyName == GET_MEMBER_NAME_CHECKED(UMCPHull, statsAsset))
 	{
 		ResetBaseStats();
-		UpdateHardpoints();
+		UpdateChildHardpoints();
 		UpdateStats();
 	}
 	else if (propertyName == GET_MEMBER_NAME_CHECKED(UMCPHull, baseStats))
 	{
-		UpdateHardpoints();
+		UpdateChildHardpoints();
 		if (baseStats.Num())
 			UpdateStats();
 	}
-	else if (propertyName == GET_MEMBER_NAME_CHECKED(UMCPHull, hardpoints))
+	else if (propertyName == GET_MEMBER_NAME_CHECKED(UMCPHull, childHardpoints))
 	{
-		UpdateHardpoints();
+		UpdateChildHardpoints();
 		if (baseStats.Num())
 			UpdateStats();
 	}

@@ -33,14 +33,27 @@ public:
 	void SetStatsAsset(UMCPStats* asset);
 
 	TArray<FMCPHullStat> GetStats() const { return stats; }
-	TArray<UMCPHardpoint*> GetHardpoints() const { return hardpoints; }
+	TArray<UMCPHardpoint*> GetChildHardpoints() const { return childHardpoints; }
+	TArray<UMCPHardpoint*> GetExtraHardpoints() const { return extraHardpoints; }
+
+	UFUNCTION(BlueprintCallable, category = "MCP Hull")
+	TArray<UMCPHardpoint*> GetAllHardpoints() const;
+
+	UFUNCTION(BlueprintCallable, category = "MCP Hull")
+	void AddExtraHardpoint(UMCPHardpoint* hardpoint);
+
+	UFUNCTION(BlueprintCallable, category = "MCP Hull")
+	bool RemoveExtraHardpointByIndex(int index);
+
+	UFUNCTION(BlueprintCallable, category = "MCP Hull")
+	int RemoveExtraHardpoint(UMCPHardpoint* hardpoint);
 
 	// Get base stat by name
 	UFUNCTION(BlueprintCallable, category = "MCP Hull")
 	float GetBaseStatValue(FString name) const;
 
 	UFUNCTION(BlueprintCallable, category = "MCP Hull")
-	void SetBaseStat(FString name, float value);
+	void SetBaseStatValue(FString name, float value);
 
 	// Get stat by name
 	UFUNCTION(BlueprintCallable, category = "MCP Hull")
@@ -51,7 +64,7 @@ public:
 	void UpdateStats();
 
 	UFUNCTION(CallInEditor, BlueprintCallable, category = "MCP Hull")
-	void UpdateHardpoints();
+	void UpdateChildHardpoints();
  
 protected:
 	UFUNCTION(CallInEditor, BlueprintCallable, category = "MCP Hull")
@@ -72,5 +85,8 @@ private:
 	TArray<FMCPHullStat> stats;
 
 	UPROPERTY(EditAnywhere, EditFixedSize, BlueprintReadOnly, category = "MCP Hull", meta = (AllowPrivateAccess = "true"))
-	TArray<UMCPHardpoint*> hardpoints;
+	TArray<UMCPHardpoint*> childHardpoints;
+
+	UPROPERTY(EditAnywhere, EditFixedSize, BlueprintReadOnly, category = "MCP Hull", meta = (AllowPrivateAccess = "true"))
+	TArray<UMCPHardpoint*> extraHardpoints;
 };
