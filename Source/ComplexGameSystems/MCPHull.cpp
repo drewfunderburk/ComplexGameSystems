@@ -20,7 +20,8 @@ void UMCPHull::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
-	
+	UpdateChildHardpoints();
+	UpdateStats(); 
 }
 
 
@@ -112,11 +113,7 @@ void UMCPHull::UpdateStats()
 {
 	// Reset stats to base
 	stats.Empty();
-	for (FMCPHullStat baseStat : baseStats)
-	{
-		FMCPHullStat stat = { baseStat.Name, baseStat.Value };
-		stats.Add(stat);
-	}
+	stats = baseStats;
 
 	for (auto* hardpoint : GetAllHardpoints())
 	{
@@ -136,14 +133,18 @@ void UMCPHull::UpdateStats()
 		}
 
 		// Apply all stats
+		TArray<FMCPHardpointStat> hardpointStats = hardpoint->GetStats();
 		for (int i = 0; i < stats.Num(); i++)
 		{
-			FMCPHardpointStat stat = hardpoint->GetStats()[i];
-
-			if (stat.IsMultiplicative)
-				stats[i].Value *= stat.Value;
-			if (!stat.IsMultiplicative)
-				stats[i].Value += stat.Value;
+			// CHECKING HERE WHY STATS DON'T STACK
+			if (hardpointStats[i].IsMultiplicative)
+			{
+				stats[i].Value *= hardpointStats[i].Value;
+			}
+			if (!hardpointStats[i].IsMultiplicative)
+			{
+				stats[i].Value += hardpointStats[i].Value;
+			}
 		}
 	}
 }
@@ -182,6 +183,7 @@ void UMCPHull::ResetBaseStats()
 void UMCPHull::PostEditChangeProperty(FPropertyChangedEvent& e)
 {
 	FName propertyName = (e.MemberProperty != NULL) ? e.MemberProperty->GetFName() : NAME_None;
+
 	if (propertyName == GET_MEMBER_NAME_CHECKED(UMCPHull, statsAsset))
 	{
 		ResetBaseStats();

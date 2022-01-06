@@ -37,11 +37,6 @@ void UMCPHardpoint::SetMCPStatsAsset(UMCPStats* asset)
 	UpdateStats();
 }
 
-void UMCPHardpoint::SetStats(TArray<FMCPHardpointStat> newStats)
-{
-	stats = newStats;
-}
-
 FMCPHardpointStat UMCPHardpoint::GetStat(FString name)
 {
 	for (auto& element : GetStats())
