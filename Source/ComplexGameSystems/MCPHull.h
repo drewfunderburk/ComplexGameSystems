@@ -66,6 +66,11 @@ public:
 	UFUNCTION(CallInEditor, BlueprintCallable, Category = "MCP Hull")
 	void UpdateChildHardpoints();
  
+	// TODO: TEST OUT EVENTS OR CUT THEM
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FHullVoidDelegate);
+	UPROPERTY(BlueprintAssignable, Category = "MCP Hull")
+	FHullVoidDelegate OnExtraHardpointAdded;
+
 protected:
 	UFUNCTION(CallInEditor, BlueprintCallable, Category = "MCP Hull")
 	void ResetBaseStats();
