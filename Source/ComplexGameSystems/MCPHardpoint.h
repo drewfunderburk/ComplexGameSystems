@@ -36,10 +36,10 @@ public:
 	TArray<FMCPHardpointStat> GetStats() const { return stats; }
 
 	// Get stat by name
-	UFUNCTION(BlueprintCallable, category = "MCP Hardpoint")
+	UFUNCTION(BlueprintCallable, Category = "MCP Hardpoint")
 	FMCPHardpointStat GetStat(FString name);
 
-	UFUNCTION(BlueprintCallable, category = "MCP Hardpoint")
+	UFUNCTION(BlueprintCallable, Category = "MCP Hardpoint")
 	void SetStat(FString name, float value, bool isMultiplicative);
 
 protected:
@@ -49,10 +49,10 @@ private:
 	void PostEditChangeProperty(struct FPropertyChangedEvent& e) override;
 
 private:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, category = "MCP Hardpoint", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "MCP Hardpoint", meta = (AllowPrivateAccess = "true"))
 	UMCPStats* statsAsset;
 
 public:
-	UPROPERTY(EditAnywhere, EditFixedSize, BlueprintReadOnly, category = "MCP Hardpoint", meta = (AllowPrivateAccess = "true", TitleProperty = "Name"))
+	UPROPERTY(EditAnywhere, EditFixedSize, BlueprintReadOnly, Category = "MCP Hardpoint", meta = (AllowPrivateAccess = "true", TitleProperty = "Name"))
 	TArray<FMCPHardpointStat> stats;
 };

@@ -61,6 +61,6 @@ class COMPLEXGAMESYSTEMS_API UMCPStats : public UDataAsset
 	GENERATED_BODY()
 	
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, category = "MCP Stats", meta = (TitleProperty = "Name"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "MCP Stats", meta = (TitleProperty = "Name"))
 	TArray<FMCPDataAssetStat> Stats;
 };
