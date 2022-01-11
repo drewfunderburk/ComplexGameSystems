@@ -66,10 +66,20 @@ public:
 	UFUNCTION(CallInEditor, BlueprintCallable, Category = "MCP Hull")
 	void UpdateChildHardpoints();
  
-	// TODO: TEST OUT EVENTS OR CUT THEM
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FHullVoidDelegate);
-	UPROPERTY(BlueprintAssignable, Category = "MCP Hull")
-	FHullVoidDelegate OnExtraHardpointAdded;
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FHardpointDelegate, UMCPHardpoint*, hardpoint);
+	// Called when a hardpoint is added to the Extra Hardpoints List
+	UPROPERTY(BlueprintAssignable, Category = "MCP Hull/Event Dispatchers")
+	FHardpointDelegate OnExtraHardpointAdded;
+
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FVoidDelegate);
+	// Called when a hardpoint is removed from the Extra Hardpoints List
+	UPROPERTY(BlueprintAssignable, Category = "MCP Hull/Event Dispatchers")
+	FVoidDelegate OnExtraHardpointRemoved;
+
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FStatDelegate, FMCPHullStat, hullStat);
+	// Called when a base stat is set via SetBaseStatValue()
+	UPROPERTY(BlueprintAssignable, Category = "MCP Hull/Event Dispatchers")
+	FStatDelegate OnBaseStatValueSet;
 
 protected:
 	UFUNCTION(CallInEditor, BlueprintCallable, Category = "MCP Hull")

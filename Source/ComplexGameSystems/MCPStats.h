@@ -51,7 +51,7 @@ public:
 	float Value = 0.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	bool IsMultiplicative = true;
+	bool IsMultiplicative = false;
 };
 
 // Type used for MCPStats Data Assets

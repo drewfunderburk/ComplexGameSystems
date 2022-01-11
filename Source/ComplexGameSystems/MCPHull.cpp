@@ -52,6 +52,7 @@ void UMCPHull::AddExtraHardpoint(UMCPHardpoint* hardpoint)
 {
 	extraHardpoints.Add(hardpoint);
 	UpdateStats();
+	OnExtraHardpointAdded.Broadcast(hardpoint);
 }
 
 bool UMCPHull::RemoveExtraHardpointByIndex(int index)
@@ -63,6 +64,7 @@ bool UMCPHull::RemoveExtraHardpointByIndex(int index)
 	extraHardpoints.RemoveAt(index);
 	UpdateChildHardpoints();
 	UpdateStats();
+	OnExtraHardpointRemoved.Broadcast();
 	return true;
 }
 
@@ -71,6 +73,7 @@ int UMCPHull::RemoveExtraHardpoint(UMCPHardpoint* hardpoint)
 	int count = extraHardpoints.Remove(hardpoint);
 	UpdateChildHardpoints();
 	UpdateStats();
+	OnExtraHardpointRemoved.Broadcast();
 	return count;
 }
 
@@ -92,6 +95,7 @@ void UMCPHull::SetBaseStatValue(FString name, float value)
 		if (baseStats[i].Name == name)
 		{
 			baseStats[i].Value = value;
+			OnBaseStatValueSet.Broadcast(baseStats[i]);
 			return;
 		}
 	}
