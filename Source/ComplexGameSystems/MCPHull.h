@@ -12,7 +12,7 @@
 
 #include "MCPHull.generated.h"
 
-//GEngine->AddOnScreenDebugMessage(-1, 15, FColor::Red, FString::Printf(TEXT("")))
+//GEngine->AddOnScreenDebugMessage(-1, 15, FColor::Red, FString::Printf(TEXT("")));
 
 UCLASS( ClassGroup=(Custom), BlueprintType, Blueprintable, meta=(BlueprintSpawnableComponent) )
 class COMPLEXGAMESYSTEMS_API UMCPHull : public UActorComponent
