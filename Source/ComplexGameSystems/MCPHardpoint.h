@@ -11,7 +11,7 @@
 
 
 class UMCPHull;
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS( ClassGroup=(Custom), BlueprintType, Blueprintable, meta=(BlueprintSpawnableComponent) )
 class COMPLEXGAMESYSTEMS_API UMCPHardpoint : public UActorComponent
 {
 	GENERATED_BODY()

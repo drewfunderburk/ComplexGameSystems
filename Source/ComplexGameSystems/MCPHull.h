@@ -12,8 +12,9 @@
 
 #include "MCPHull.generated.h"
 
+//GEngine->AddOnScreenDebugMessage(-1, 15, FColor::Red, FString::Printf(TEXT("")))
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS( ClassGroup=(Custom), BlueprintType, Blueprintable, meta=(BlueprintSpawnableComponent) )
 class COMPLEXGAMESYSTEMS_API UMCPHull : public UActorComponent
 {
 	GENERATED_BODY()
@@ -41,6 +42,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "MCP Hull")
 	void AddExtraHardpoint(UMCPHardpoint* hardpoint);
+
+	UFUNCTION(BlueprintCallable, Category = "MCP Hull")
+	UPARAM(DisplayName = "Hardpoint") UMCPHardpoint* CreateAndAddExtraHardpoint(TSubclassOf<UMCPHardpoint> hardpoint);
 
 	UFUNCTION(BlueprintCallable, Category = "MCP Hull")
 	bool RemoveExtraHardpointByIndex(int index);
@@ -93,10 +97,10 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "MCP Hull", meta=(AllowPrivateAccess = "true"))
 	UMCPStats* statsAsset;
 
-	UPROPERTY(EditAnywhere, EditFixedSize, BlueprintReadOnly, Category = "MCP Hull", meta = (AllowPrivateAccess = "true", TitleProperty = "Name"))
+	UPROPERTY(EditAnywhere, EditFixedSize, Category = "MCP Hull", meta = (AllowPrivateAccess = "true", TitleProperty = "Name"))
 	TArray<FMCPHullStat> baseStats;
 
-	UPROPERTY(EditAnywhere, EditFixedSize, BlueprintReadOnly, Category = "MCP Hull", meta = (AllowPrivateAccess = "true", TitleProperty = "Name"))
+	UPROPERTY(EditAnywhere, EditFixedSize, Category = "MCP Hull", meta = (AllowPrivateAccess = "true", TitleProperty = "Name"))
 	TArray<FMCPHullStat> stats;
 
 	UPROPERTY(EditAnywhere, EditFixedSize, BlueprintReadOnly, Category = "MCP Hull", meta = (AllowPrivateAccess = "true"))

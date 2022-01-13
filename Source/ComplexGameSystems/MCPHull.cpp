@@ -55,6 +55,15 @@ void UMCPHull::AddExtraHardpoint(UMCPHardpoint* hardpoint)
 	OnExtraHardpointAdded.Broadcast(hardpoint);
 }
 
+UMCPHardpoint* UMCPHull::CreateAndAddExtraHardpoint(TSubclassOf<UMCPHardpoint> hardpoint)
+{
+	UMCPHardpoint* newHardpoint = NewObject<UMCPHardpoint>(GetOwner(), hardpoint.Get());
+	newHardpoint->RegisterComponent();
+	GetOwner()->AddOwnedComponent(newHardpoint);
+	AddExtraHardpoint(newHardpoint);
+	return newHardpoint;
+}
+
 bool UMCPHull::RemoveExtraHardpointByIndex(int index)
 {
 	// Ensure valid index

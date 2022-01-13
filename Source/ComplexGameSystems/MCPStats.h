@@ -25,7 +25,7 @@ struct FMCPHullStat
 {
 	GENERATED_USTRUCT_BODY()
 public:
-	FMCPHullStat(FString name = "", float value = 1.0f) 
+	FMCPHullStat(FString name = "", float value = 0.0f)
 		: Name(name), Value(value) {}
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
@@ -41,7 +41,7 @@ struct FMCPHardpointStat
 {
 	GENERATED_USTRUCT_BODY()
 public:
-	FMCPHardpointStat(FString name = "", float value = 1.0f, bool isMultiplicative = false) 
+	FMCPHardpointStat(FString name = "", float value = 0.0f, bool isMultiplicative = false) 
 		: Name(name), Value(value), IsMultiplicative(isMultiplicative) {}
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
