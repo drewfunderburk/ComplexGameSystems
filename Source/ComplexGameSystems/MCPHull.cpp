@@ -55,13 +55,27 @@ void UMCPHull::AddExtraHardpoint(UMCPHardpoint* hardpoint)
 	OnExtraHardpointAdded.Broadcast(hardpoint);
 }
 
-UMCPHardpoint* UMCPHull::CreateAndAddExtraHardpoint(TSubclassOf<UMCPHardpoint> hardpoint)
+UMCPHardpoint* UMCPHull::CreateAndAddChildHardpoint(TSubclassOf<UMCPHardpoint> hardpoint)
 {
 	UMCPHardpoint* newHardpoint = NewObject<UMCPHardpoint>(GetOwner(), hardpoint.Get());
 	newHardpoint->RegisterComponent();
 	GetOwner()->AddOwnedComponent(newHardpoint);
-	AddExtraHardpoint(newHardpoint);
+	UpdateChildHardpoints();
+	UpdateStats();
+	OnChildHardpointAdded.Broadcast(newHardpoint);
 	return newHardpoint;
+}
+
+bool UMCPHull::RemoveChildHardpoint(UMCPHardpoint* hardpoint)
+{
+	int item = childHardpoints.Find(hardpoint);
+	GEngine->AddOnScreenDebugMessage(-1, 15, FColor::Blue, FString::Printf(TEXT("%i"), item));
+	childHardpoints[item]->DestroyComponent();
+
+	UpdateChildHardpoints();
+	UpdateStats();
+	OnChildHardpointRemoved.Broadcast();
+	return true;
 }
 
 bool UMCPHull::RemoveExtraHardpointByIndex(int index)
@@ -152,11 +166,11 @@ void UMCPHull::UpdateStats()
 			// CHECKING HERE WHY STATS DON'T STACK
 			if (hardpointStats[i].IsMultiplicative)
 			{
-				stats[i].Value *= hardpointStats[i].Value;
+				stats[i].Value = stats[i].Value * hardpointStats[i].Value;
 			}
 			if (!hardpointStats[i].IsMultiplicative)
 			{
-				stats[i].Value += hardpointStats[i].Value;
+				stats[i].Value = stats[i].Value + hardpointStats[i].Value;
 			}
 		}
 	}

@@ -44,7 +44,10 @@ public:
 	void AddExtraHardpoint(UMCPHardpoint* hardpoint);
 
 	UFUNCTION(BlueprintCallable, Category = "MCP Hull")
-	UPARAM(DisplayName = "Hardpoint") UMCPHardpoint* CreateAndAddExtraHardpoint(TSubclassOf<UMCPHardpoint> hardpoint);
+	UPARAM(DisplayName = "Hardpoint") UMCPHardpoint* CreateAndAddChildHardpoint(TSubclassOf<UMCPHardpoint> hardpoint);
+
+	UFUNCTION(BlueprintCallable, Category = "MCP Hull")
+	UPARAM(DisplayName = "Removed") bool RemoveChildHardpoint(UMCPHardpoint* hardpoint);
 
 	UFUNCTION(BlueprintCallable, Category = "MCP Hull")
 	bool RemoveExtraHardpointByIndex(int index);
@@ -79,6 +82,12 @@ public:
 	// Called when a hardpoint is removed from the Extra Hardpoints List
 	UPROPERTY(BlueprintAssignable, Category = "MCP Hull/Event Dispatchers")
 	FVoidDelegate OnExtraHardpointRemoved;
+
+	UPROPERTY(BlueprintAssignable, Category = "MCP Hull/Event Dispatchers")
+	FHardpointDelegate OnChildHardpointAdded;
+
+	UPROPERTY(BlueprintAssignable, Category = "MCP Hull/Event Dispatchers")
+	FVoidDelegate OnChildHardpointRemoved;
 
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FStatDelegate, FMCPHullStat, hullStat);
 	// Called when a base stat is set via SetBaseStatValue()
