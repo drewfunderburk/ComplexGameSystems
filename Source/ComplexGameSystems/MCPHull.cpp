@@ -69,13 +69,17 @@ UMCPHardpoint* UMCPHull::CreateAndAddChildHardpoint(TSubclassOf<UMCPHardpoint> h
 bool UMCPHull::RemoveChildHardpoint(UMCPHardpoint* hardpoint)
 {
 	int item = childHardpoints.Find(hardpoint);
-	GEngine->AddOnScreenDebugMessage(-1, 15, FColor::Blue, FString::Printf(TEXT("%i"), item));
-	childHardpoints[item]->DestroyComponent();
-
+	bool removed = false;
+	if (childHardpoints[item])
+	{
+		childHardpoints[item]->DestroyComponent();
+		removed = true;
+	}
+	
 	UpdateChildHardpoints();
 	UpdateStats();
 	OnChildHardpointRemoved.Broadcast();
-	return true;
+	return removed;
 }
 
 bool UMCPHull::RemoveExtraHardpointByIndex(int index)
