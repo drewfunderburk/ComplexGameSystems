@@ -87,12 +87,33 @@ private:
 	// Used to auto update properties in details
 	void PostEditChangeProperty(struct FPropertyChangedEvent& e) override;
 
-private:
+public:
 	// Declare delegate types for events
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FHardpointDelegate, UMCPHardpoint*, hardpoint);
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FVoidDelegate);
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FStatDelegate, FMCPHullStat, hullStat);
 
+	// Broadcast when a hardpoint is added to the Extra Hardpoints List
+	UPROPERTY(BlueprintAssignable, Category = "MCP Hull/Event Dispatchers")
+	FHardpointDelegate OnExtraHardpointAdded;
+
+	// Broadcast when a hardpoint is removed from the Extra Hardpoints List
+	UPROPERTY(BlueprintAssignable, Category = "MCP Hull/Event Dispatchers")
+	FVoidDelegate OnExtraHardpointRemoved;
+
+	// Broadcast when a hardpoint is added to the Child Hardpoints List
+	UPROPERTY(BlueprintAssignable, Category = "MCP Hull/Event Dispatchers")
+	FHardpointDelegate OnChildHardpointAdded;
+
+	// Broadcast when a hardpoint is removed from the Child Hardpoints List
+	UPROPERTY(BlueprintAssignable, Category = "MCP Hull/Event Dispatchers")
+	FVoidDelegate OnChildHardpointRemoved;
+
+	// Broadcast when a base stat is set via SetBaseStatValue()
+	UPROPERTY(BlueprintAssignable, Category = "MCP Hull/Event Dispatchers")
+	FStatDelegate OnBaseStatValueSet;
+
+private:
 	// MCPStats data asset
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "MCP Hull", meta=(AllowPrivateAccess = "true"))
 	UMCPStats* statsAsset;
@@ -112,24 +133,4 @@ private:
 	// Array of any extra hardpoints added
 	UPROPERTY(EditAnywhere, EditFixedSize, BlueprintReadOnly, Category = "MCP Hull", meta = (AllowPrivateAccess = "true"))
 	TArray<UMCPHardpoint*> extraHardpoints;
-
-	// Called when a hardpoint is added to the Extra Hardpoints List
-	UPROPERTY(BlueprintAssignable, Category = "MCP Hull/Event Dispatchers")
-	FHardpointDelegate OnExtraHardpointAdded;
-
-	// Called when a hardpoint is removed from the Extra Hardpoints List
-	UPROPERTY(BlueprintAssignable, Category = "MCP Hull/Event Dispatchers")
-	FVoidDelegate OnExtraHardpointRemoved;
-
-	// Called when a hardpoint is added to the Child Hardpoints List
-	UPROPERTY(BlueprintAssignable, Category = "MCP Hull/Event Dispatchers")
-	FHardpointDelegate OnChildHardpointAdded;
-
-	// Called when a hardpoint is removed from the Child Hardpoints List
-	UPROPERTY(BlueprintAssignable, Category = "MCP Hull/Event Dispatchers")
-	FVoidDelegate OnChildHardpointRemoved;
-
-	// Called when a base stat is set via SetBaseStatValue()
-	UPROPERTY(BlueprintAssignable, Category = "MCP Hull/Event Dispatchers")
-	FStatDelegate OnBaseStatValueSet;
 };
