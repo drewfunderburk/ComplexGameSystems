@@ -12,8 +12,6 @@
 
 #include "MCPHull.generated.h"
 
-//GEngine->AddOnScreenDebugMessage(-1, 15, FColor::Red, FString::Printf(TEXT("")));
-
 UCLASS( ClassGroup=(Custom), BlueprintType, Blueprintable, meta=(BlueprintSpawnableComponent) )
 class COMPLEXGAMESYSTEMS_API UMCPHull : public UActorComponent
 {
@@ -40,18 +38,24 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "MCP Hull")
 	TArray<UMCPHardpoint*> GetAllHardpoints() const;
 
-	UFUNCTION(BlueprintCallable, Category = "MCP Hull")
-	void AddExtraHardpoint(UMCPHardpoint* hardpoint);
 
+	// Create and add a hardpoint to the childHarpdoints array
 	UFUNCTION(BlueprintCallable, Category = "MCP Hull")
 	UPARAM(DisplayName = "Hardpoint") UMCPHardpoint* CreateAndAddChildHardpoint(TSubclassOf<UMCPHardpoint> hardpoint);
 
+	// Remove hardpoint from the childHardpoints array
 	UFUNCTION(BlueprintCallable, Category = "MCP Hull")
 	UPARAM(DisplayName = "Removed") bool RemoveChildHardpoint(UMCPHardpoint* hardpoint);
 
+	// Add a hardpoint to the extraHardpoints array
+	UFUNCTION(BlueprintCallable, Category = "MCP Hull")
+	void AddExtraHardpoint(UMCPHardpoint* hardpoint);
+
+	// Remove a hardpoint from the extraHardpoints array by index
 	UFUNCTION(BlueprintCallable, Category = "MCP Hull")
 	bool RemoveExtraHardpointByIndex(int index);
 
+	// Remove a hardpoint from the extraHardpoints array by pointer
 	UFUNCTION(BlueprintCallable, Category = "MCP Hull")
 	int RemoveExtraHardpoint(UMCPHardpoint* hardpoint);
 
@@ -59,6 +63,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "MCP Hull")
 	float GetBaseStatValue(FString name) const;
 
+	// Set a base stat's value
 	UFUNCTION(BlueprintCallable, Category = "MCP Hull")
 	void SetBaseStatValue(FString name, float value);
 
@@ -72,29 +77,9 @@ public:
 
 	UFUNCTION(CallInEditor, BlueprintCallable, Category = "MCP Hull")
 	void UpdateChildHardpoints();
- 
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FHardpointDelegate, UMCPHardpoint*, hardpoint);
-	// Called when a hardpoint is added to the Extra Hardpoints List
-	UPROPERTY(BlueprintAssignable, Category = "MCP Hull/Event Dispatchers")
-	FHardpointDelegate OnExtraHardpointAdded;
-
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FVoidDelegate);
-	// Called when a hardpoint is removed from the Extra Hardpoints List
-	UPROPERTY(BlueprintAssignable, Category = "MCP Hull/Event Dispatchers")
-	FVoidDelegate OnExtraHardpointRemoved;
-
-	UPROPERTY(BlueprintAssignable, Category = "MCP Hull/Event Dispatchers")
-	FHardpointDelegate OnChildHardpointAdded;
-
-	UPROPERTY(BlueprintAssignable, Category = "MCP Hull/Event Dispatchers")
-	FVoidDelegate OnChildHardpointRemoved;
-
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FStatDelegate, FMCPHullStat, hullStat);
-	// Called when a base stat is set via SetBaseStatValue()
-	UPROPERTY(BlueprintAssignable, Category = "MCP Hull/Event Dispatchers")
-	FStatDelegate OnBaseStatValueSet;
 
 protected:
+	// Reset baseStats back to what it should be from statsAsset with values of 0
 	UFUNCTION(CallInEditor, BlueprintCallable, Category = "MCP Hull")
 	void ResetBaseStats();
 
@@ -103,18 +88,48 @@ private:
 	void PostEditChangeProperty(struct FPropertyChangedEvent& e) override;
 
 private:
+	// Declare delegate types for events
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FHardpointDelegate, UMCPHardpoint*, hardpoint);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FVoidDelegate);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FStatDelegate, FMCPHullStat, hullStat);
+
+	// MCPStats data asset
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "MCP Hull", meta=(AllowPrivateAccess = "true"))
 	UMCPStats* statsAsset;
 
+	// Array of base stats from statsAsset
 	UPROPERTY(EditAnywhere, EditFixedSize, Category = "MCP Hull", meta = (AllowPrivateAccess = "true", TitleProperty = "Name"))
 	TArray<FMCPHullStat> baseStats;
 
+	// Array of stats altered by hardpoints
 	UPROPERTY(EditAnywhere, EditFixedSize, Category = "MCP Hull", meta = (AllowPrivateAccess = "true", TitleProperty = "Name"))
 	TArray<FMCPHullStat> stats;
 
+	// Array of child hardpoints
 	UPROPERTY(EditAnywhere, EditFixedSize, BlueprintReadOnly, Category = "MCP Hull", meta = (AllowPrivateAccess = "true"))
 	TArray<UMCPHardpoint*> childHardpoints;
 
+	// Array of any extra hardpoints added
 	UPROPERTY(EditAnywhere, EditFixedSize, BlueprintReadOnly, Category = "MCP Hull", meta = (AllowPrivateAccess = "true"))
 	TArray<UMCPHardpoint*> extraHardpoints;
+
+	// Called when a hardpoint is added to the Extra Hardpoints List
+	UPROPERTY(BlueprintAssignable, Category = "MCP Hull/Event Dispatchers")
+	FHardpointDelegate OnExtraHardpointAdded;
+
+	// Called when a hardpoint is removed from the Extra Hardpoints List
+	UPROPERTY(BlueprintAssignable, Category = "MCP Hull/Event Dispatchers")
+	FVoidDelegate OnExtraHardpointRemoved;
+
+	// Called when a hardpoint is added to the Child Hardpoints List
+	UPROPERTY(BlueprintAssignable, Category = "MCP Hull/Event Dispatchers")
+	FHardpointDelegate OnChildHardpointAdded;
+
+	// Called when a hardpoint is removed from the Child Hardpoints List
+	UPROPERTY(BlueprintAssignable, Category = "MCP Hull/Event Dispatchers")
+	FVoidDelegate OnChildHardpointRemoved;
+
+	// Called when a base stat is set via SetBaseStatValue()
+	UPROPERTY(BlueprintAssignable, Category = "MCP Hull/Event Dispatchers")
+	FStatDelegate OnBaseStatValueSet;
 };

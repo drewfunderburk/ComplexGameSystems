@@ -178,7 +178,6 @@ void UMCPHull::UpdateStats()
 			}
 		}
 	}
-	//GEngine->AddOnScreenDebugMessage(-1, 15, FColor::Red, FString::Printf(TEXT("Test")));
 }
 
 void UMCPHull::UpdateChildHardpoints()
