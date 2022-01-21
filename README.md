@@ -28,7 +28,11 @@ creation of their own hulls and hardpoints, handling integration and framework
 so developers can focus on stats and gameplay.
 
 ### Installation
-Add download instructions here
+- Download the latest release [here](https://github.com/drewfunderburk/ComplexGameSystems/releases)
+- Unzip MCP_Source.zip and copy its contents into your source directory.
+- Change `COMPLEXGAMESYSTEMS_API` in each header file to `YOURPROJECTNAME_API`.
+- Open your project's solution and add the new files.
+- Rebuild your project, and you should now see the MCP classes in your editor.
 
 ### How to use
 - Create a DataAsset that derives from UMCPStats.
