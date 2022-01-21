@@ -1,7 +1,33 @@
 # Modular Combat Platform
 
 ### How to use
+- Create a DataAsset that derives from UMCPStats.
+  This asset will allow you to specify the stats that an entire system will use.
+- Create an Actor and add an MCPHull Actor Component to it.
+  This will serve as your "Hub" for stats and hardpoints.
+- In the details panel for the MCPHardpoint component, assign the DataAsset you created
+  to the stats asset variable. This will update the MCPHull's base stats to reflect
+  this system's stats.
+- Set the MCPHull's base stats to the point you would like them to be before any
+  hardpoints are added. (Note: As an MCPHull cannot get its hardpoints in editor,
+  the stats variable will be the same as the base stats until the project enters play).
+- Add an MCPHardpoint Actor Component to the Actor and assign the same DataAsset to its
+  stats asset variable. Its stats will update to reflect this system's stats.
+- Set the MCPHardpoint's stats so that they reflect how you would like this hardpoint
+  to modify the MCPHull at runtime.
+- Upon running the project, an in-level MCPHull will gather all MCPHardpoints on itself
+  and any child actors and modify its stats accordingly. These stats can then be accessed
+  outside the system by your own gameplay systems.
 
+> Important Notes:
+> 
+> The functionality of this system is limited in editor, and while base stats can be
+> edited and hardpoints changed the actual stats should be checked while the game is
+> playing.
+> 
+> All MCPHulls and MCPHardpoints that need to function together in a system must use
+> the same DataAsset, as this is how they judge if they are compatible and can expect
+> to have the same stats.
 
 ![Modular Combat Platform U M L Completed](ModularCombatPlatform_UML_Completed.png)
 ### Table of Contents
