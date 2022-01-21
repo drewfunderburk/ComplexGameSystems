@@ -1,5 +1,8 @@
 # Modular Combat Platform
 
+### How to use
+
+
 ![Modular Combat Platform U M L Completed](ModularCombatPlatform_UML_Completed.png)
 ### Table of Contents
 - [UMCPHull](#class-UMCPHull-UActorComponent)
@@ -10,7 +13,11 @@
 - [FMCPHardpointStat](#struct-FMCPHardpointStat)
 
 #### class UMCPHull : [UActorComponent](https://docs.unrealengine.com/4.27/en-US/API/Runtime/Engine/Components/UActorComponent/)
-> Description here.
+> The center point for this system.
+> An MCPHull will automatically collect any MCPHardpoint components on the same actor, or in child actors
+> and merge their stats into the MCPHull.
+> An MCPHull also allows for extra hardpoints to be added from another Actor, as well as creating and
+> adding child hardpoints at runtime.
 
 Declares the following Dynamic Multicast Delegates:
 ```c++
@@ -55,7 +62,10 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FStatDelegate, FMCPHullStat, hullSta
 | void ResetBaseStats()                                                            | Reset baseStats back to what it should be from statsAsset with values of 0 |
 
 #### class UMCPHardpoint : [UActorComponent](https://docs.unrealengine.com/4.27/en-US/API/Runtime/Engine/Components/UActorComponent/)
-> Description here.
+> The peripherals for this system.
+> An MCPHardpoint stores stats as modifiers, and is used by an MCPHull to alter its base stats.
+> MCPHardpoint stats are stored as a Name, Float, and a boolean for whether the stat should be
+> additive or multiplicative when applied to an MCPHull's base stats.
 
 | Variable                         | Use                                  |
 |:---------------------------------|:-------------------------------------|
@@ -74,21 +84,22 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FStatDelegate, FMCPHullStat, hullSta
 | void UpdateStats()                                             | Updates stats         |
 
 #### class UMCPStats : [UDataAsset](https://docs.unrealengine.com/4.27/en-US/API/Runtime/Engine/Engine/UDataAsset/)
-> Description here.
+> Base class for the UDataAsset object every MCPHull and MCPHardpoint will need in its statsAsset variable.
+> All Data Asset objects used in a Modular Combat Platform system should derive from this class.
 
 | Variable                         | Use                                                    |
 |:---------------------------------|:-------------------------------------------------------|
 | TArray\<FMCPDataAssetStat> Stats | Stores the individual stats a combat platform will use |
 
 #### struct FMCPDataAssetStat
-> Description here.
+> Used only by UMCPStats.
 
 | Variable     | Use                          |
 |:-------------|:-----------------------------|
 | FString Name | Stores the name of this stat |
 
 #### struct FMCPHullStat
-> Description here.
+> Struct representation of stats stored in an MCPHull.
 
 | Variable     | Use                          |
 |:-------------|:-----------------------------|
@@ -96,7 +107,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FStatDelegate, FMCPHullStat, hullSta
 | float Value  | This stat's value            |
 
 #### struct FMCPHardpointStat
-> Description here.
+> Struct representation of stats stored in an MCPHardpoint.
 
 | Variable              | Use                                                              |
 |:----------------------|:-----------------------------------------------------------------|
